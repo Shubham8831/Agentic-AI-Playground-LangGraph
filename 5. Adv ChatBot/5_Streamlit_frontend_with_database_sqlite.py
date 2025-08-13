@@ -1,36 +1,7 @@
-"""
-TASK to implement Threading:
-
-
-```
--> add a sidebar with title + A Start Chat Button + A title named 'My Conversations'  [Done]
-
--> generate dynamic thread Id and add it to the session  [Done]
-
--> Display the thread id in sidebar [Done]
-
-************************************************************
-
--> On Click of new chat open a new chat window
-    * generate a new thread_id
-    * save it in session
-    * reset message history
-
-************************************************************
-
--> create a list to store all thread_ids
--> Load all the thread ids in the sidebar
--> convert the side bar text to clickable buttons
-
-************************************************************
-
--> on click of a particular thread id load that particular conversation
-```
-
-"""
+# WE HAVE TO ONLY CHANGE SESSION SETUP
 
 import streamlit as st
-from chatbot_backend_2 import chatbot
+from chatbot_database_backend_3 import chatbot, retrive_all_threads
 from langchain_core.messages import HumanMessage
 import uuid #  generate unique thread identifiers.
 
@@ -62,7 +33,9 @@ if 'thread_id' not in st.session_state:
     st.session_state['thread_id'] = generate_thread_id()
 
 if 'chat_threads' not in st.session_state:
-    st.session_state['chat_threads'] = []
+    # st.session_state['chat_threads'] = [] #so when session reloads then we are always setting new chat_thread BUT now we have a sqlite database which will have all the threads
+    # now we will have to pass the thread_ids in the []
+    st.session_state['chat_threads'] = retrive_all_threads()
 
 add_thread(st.session_state['thread_id'])
 
