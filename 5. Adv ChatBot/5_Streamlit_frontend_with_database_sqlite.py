@@ -1,7 +1,7 @@
 # WE HAVE TO ONLY CHANGE SESSION SETUP
 
 import streamlit as st
-from chatbot_database_backend_3 import chatbot, retrive_all_threads
+from langgraph_tool_backend_4 import chatbot, retrive_all_threads
 from langchain_core.messages import HumanMessage
 import uuid #  generate unique thread identifiers.
 
@@ -96,9 +96,18 @@ if user_input:
     with st.chat_message('user'):
         st.text(user_input)
 
-    CONFIG = {'configurable': {'thread_id': st.session_state['thread_id']}}
+    #CONFIG = {'configurable': {'thread_id': st.session_state['thread_id']}}
 
-    # first add the message to message_history
+    #new config
+    CONFIG = {
+        "configurable": {"thread_id": st.session_state["thread_id"]},
+        "metadata": {
+            "thread_id": st.session_state["thread_id"]
+        },
+        "run_name": "chat_turn",
+    }
+
+    # first add the message to message_history 
     with st.chat_message('assistant'):
 
         ai_message = st.write_stream(
@@ -109,4 +118,4 @@ if user_input:
             )
         )
 
-    st.session_state['message_history'].append({'role': 'assistant', 'content': ai_message})
+    st.session_state['message_history'].append({'role': 'assistant', 'content': ai_message})  
