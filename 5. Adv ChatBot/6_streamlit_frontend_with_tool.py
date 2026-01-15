@@ -1,5 +1,9 @@
+""" Special handling for AI tools (like web search, calculators, etc.)
+Filters streaming to show only AI messages, not tool calls
+This prevents showing technical tool execution details to users"""
+
 import streamlit as st
-from langgraph_tool_backend_4 import chatbot
+from langgraph_tool_backend_4 import chatbot, retrive_all_threads
 from langchain_core.messages import HumanMessage, AIMessage
 import uuid
 
@@ -33,7 +37,7 @@ if 'thread_id' not in st.session_state:
     st.session_state['thread_id'] = generate_thread_id()
 
 if 'chat_threads' not in st.session_state:
-    st.session_state['chat_threads'] = []
+    st.session_state['chat_threads'] = retrive_all_threads()
 
 add_thread(st.session_state['thread_id'])
 
@@ -47,9 +51,29 @@ if st.sidebar.button('New Chat'):
 
 st.sidebar.header('My Conversations')
 
+# for thread_id in st.session_state['chat_threads'][::-1]:
+#     if st.sidebar.button(str(thread_id)):
+#         st.session_state['thread_id'] = thread_id
+
 for thread_id in st.session_state['chat_threads'][::-1]:
-    if st.sidebar.button(str(thread_id)):
+    
+    # Load messages for this thread
+    state = chatbot.get_state(config={'configurable': {'thread_id': thread_id}})
+    messages = state.values.get('messages', [])
+    
+    # Find the last HumanMessage
+    last_user_msg = next(
+        (msg.content for msg in reversed(messages) if isinstance(msg, HumanMessage)),
+        "chats"
+    )
+    
+    # Create a nice label (first 20 chars)
+    label = last_user_msg[:20] + ("..." if len(last_user_msg) > 20 else "")
+    
+    # Use label instead of thread_id
+    if st.sidebar.button(label, key=f"btn_{thread_id}"):  # ✅ NEW - shows message preview
         st.session_state['thread_id'] = thread_id
+
         messages = load_conversation(thread_id)
 
         temp_messages = []

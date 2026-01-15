@@ -1,4 +1,12 @@
 """
+Added sidebar with "New Chat" button
+Can have multiple conversations (threads)
+Each chat gets a unique ID
+Threads stored only in session memory (lost when you refresh page)
+Sidebar shows thread IDs as buttons to switch between chats
+Better sidebar labels using first 20 characters of last user message """
+
+"""
 TASK to implement Threading:
 
 
@@ -12,8 +20,8 @@ TASK to implement Threading:
 ************************************************************
 
 -> On Click of new chat open a new chat window
-    * generate a new thread_id
-    * save it in session
+    * generate a new thread_id 
+    * save it in session 
     * reset message history
 
 ************************************************************

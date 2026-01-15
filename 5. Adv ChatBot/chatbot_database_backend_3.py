@@ -27,7 +27,7 @@ key = os.getenv("GROQ_API_KEY")
 llm = ChatGroq(model="llama-3.3-70b-versatile", api_key=key)
 
 class ChatState(TypedDict):
-    messages: Annotated[list[BaseMessage], add_messages]
+    messages: Annotated[list[BaseMessage], add_messages] #Append new messages instead of overwriting old ones
 
 def chat_node(state: ChatState):
     messages = state['messages']
@@ -41,6 +41,7 @@ def chat_node(state: ChatState):
 #CHECKPOINTER SETUP
 conn = sqlite3.connect(database = "chatbot.db", check_same_thread=False) # it chatbot.db not exist then it will create it  #THIS MAKES A CONNECTION OBJECT
 #check_same_thread is true gives error coz we will use multiple threads BUT sqlite works in single thread so we are removing restriction
+
 checkpointer = SqliteSaver(conn=conn) # behind the schene we have to make a sqlite database (made above)
 
 graph = StateGraph(ChatState)

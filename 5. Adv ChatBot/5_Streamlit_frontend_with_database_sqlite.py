@@ -1,4 +1,9 @@
 # WE HAVE TO ONLY CHANGE SESSION SETUP
+""" Threads saved in SQLite database (permanent storage)
+Uses retrive_all_threads() to load saved conversations
+Conversations persist even after page refresh
+Added metadata to CONFIG for better tracking"""
+
 
 import streamlit as st
 from langgraph_tool_backend_4 import chatbot, retrive_all_threads

@@ -1,3 +1,10 @@
+"""
+Most basic version
+Single conversation only
+Uses streaming to show responses word-by-word
+No sidebar, no conversation saving
+"""
+
 import streamlit as st
 from chatbot_backend_2 import chatbot
 from langchain_core.messages import HumanMessage

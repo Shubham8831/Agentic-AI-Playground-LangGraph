@@ -29,6 +29,10 @@ graph.add_edge("chat_node", END)
 
 chatbot = graph.compile(checkpointer=checkpointer)
 
+
+
+#STREAMING EXECUTION (streams text token by token)
+
 # for message_chunk, metadata in chatbot.stream(
 #     {"messages":[HumanMessage(content = "what is recipi to make pasta")]},  # first we pass the initial state
 #     CONFIG = {'configurable': {'thread_id': 'thread-1'}}, # then we pass the config for thread id

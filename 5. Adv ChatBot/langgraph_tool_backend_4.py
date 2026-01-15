@@ -1,8 +1,11 @@
 """
-- pip install langgraph-checkpoint-sqlite
-- implement database here
-- 
+TOOL NODE - prebuild node type that acts as a bridge between your graph adn external tools 
+it is ready made tool that knows how to handle a list of tools
+its job - is to listen for tool call sfrom the llm and automatically route the request to the correct tool, then pass the tool output back into the graph
+"""
 
+"""
+TOOL_CONDITIONS - prebuild conditional edge fn that helps your graph decide; should the flow go to the toolnode next or back to llm?
 """
 
 
@@ -31,7 +34,7 @@ from langchain_core.messages import HumanMessage
 import os
 load_dotenv()
 key = os.getenv("GROQ_API_KEY")
-llm = ChatGroq(model="llama-3.3-70b-versatile", api_key=key)
+llm = ChatGroq(model="openai/gpt-oss-120b", api_key=key)
 
 
 
@@ -100,7 +103,7 @@ def chat_node(state: ChatState):
     response = llm_with_tool.invoke(messages)
     return {"messages": [response]}
 
-tool_node = ToolNode(tools)
+tool_node = ToolNode(tools) # maKIGN TOOL NODE
 
 # Checkpointer
 # checkpointer = InMemorySaver()
